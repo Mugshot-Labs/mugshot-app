@@ -1,12 +1,9 @@
 "use client";
 
-import { Box, Flex, IconButton, useToast } from "@chakra-ui/react";
-import { useCallback, useEffect, useState } from "react";
-import { IoMdReverseCamera } from "react-icons/io";
+import { Box, Flex, useToast } from "@chakra-ui/react";
+import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import Sheet from "react-modal-sheet";
-
-import Camera, { FACING_MODES, IMAGE_TYPES } from "react-html5-camera-photo";
-import "react-html5-camera-photo/build/css/index.css";
+import { useGeolocated } from "react-geolocated";
 
 export const CameraDrawer = ({
     isOpen,
@@ -19,89 +16,101 @@ export const CameraDrawer = ({
 }) => {
     const toast = useToast();
 
-    const [cameraFaciingMode, setCameraFacingMode] = useState<
-        typeof FACING_MODES.ENVIRONMENT | typeof FACING_MODES.USER
-    >(FACING_MODES.ENVIRONMENT);
-
-    function handleTakePhoto(dataUri: string) {
-        onFotoTaken(dataUri);
-    }
-
-    function handleCameraError(error: Error) {
-        console.log("handleCameraError", error);
-        toast({
-            title: "Error",
-            description: "Error while accessing the camera. Please try again.",
-            status: "error",
-            duration: 9000,
-            isClosable: true,
+    const { coords, isGeolocationAvailable, isGeolocationEnabled } =
+        useGeolocated({
+            positionOptions: {
+                enableHighAccuracy: true,
+            },
+            userDecisionTimeout: 10000,
         });
-    }
 
-    function handleCameraStart() {
-        console.log("handleCameraStart");
-    }
+    console.log({ coords, isGeolocationAvailable, isGeolocationEnabled });
 
-    function handleCameraStop() {
-        console.log("handleCameraStop");
-    }
-
-    const handleCameraFacingMode = useCallback(() => {
-        setCameraFacingMode((prevState) =>
-            prevState === FACING_MODES.ENVIRONMENT
-                ? FACING_MODES.USER
-                : FACING_MODES.ENVIRONMENT
+    const RenderGPS = useMemo(() => {
+        return !isGeolocationAvailable ? (
+            <div>Your browser does not support Geolocation</div>
+        ) : !isGeolocationEnabled ? (
+            <div>Geolocation is not enabled</div>
+        ) : coords ? (
+            <table>
+                <tbody>
+                    <tr>
+                        <td>latitude</td>
+                        <td>{coords.latitude}</td>
+                    </tr>
+                    <tr>
+                        <td>longitude</td>
+                        <td>{coords.longitude}</td>
+                    </tr>
+                    <tr>
+                        <td>altitude</td>
+                        <td>{coords.altitude}</td>
+                    </tr>
+                    <tr>
+                        <td>heading</td>
+                        <td>{coords.heading}</td>
+                    </tr>
+                    <tr>
+                        <td>speed</td>
+                        <td>{coords.speed}</td>
+                    </tr>
+                </tbody>
+            </table>
+        ) : (
+            <div>Getting the location data&hellip; </div>
         );
-    }, []);
+    }, [coords, isGeolocationAvailable, isGeolocationEnabled]);
+
+    console.log({ RenderGPS });
 
     // TODO - Add theme and colorMode to bottom sheet
 
+    const handleClose = useCallback(() => {
+        // cancel();
+        onClose();
+        onFotoTaken("dataUri");
+        toast({});
+    }, [onClose, onFotoTaken, toast]);
+
+    const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
+
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]; // Access the selected file
+        if (file) {
+            setSelectedPhoto(file); // Update the state with the selected file
+        }
+
+        /*
+            {selectedPhoto && (
+                <div>
+                <h2>Selected Photo:</h2>
+                <img src={URL.createObjectURL(selectedPhoto)} alt="Selected" />
+                </div>
+            )}
+        */
+    };
+
     return (
-        <Sheet isOpen={isOpen} onClose={onClose} detent="content-height">
+        <Sheet isOpen={isOpen} onClose={handleClose} detent="content-height">
             <Sheet.Container>
                 <Sheet.Header />
                 <Sheet.Content>
-                    <Box
-                        style={{
-                            position: "absolute",
-                            top: 10,
-                            right: 10,
-                        }}
-                    >
-                        <IconButton
-                            m={6}
-                            bg="transparent"
-                            alignSelf="flex-end"
-                            aria-label="close"
-                            style={{ zIndex: 99999 }}
-                            onClick={handleCameraFacingMode}
-                        >
-                            <IoMdReverseCamera size={32} />
-                        </IconButton>
-                    </Box>
-
                     {isOpen && (
                         <Flex direction="column">
                             <Box m={6} borderRadius={12} overflow="clip">
-                                <Camera
-                                    imageType={IMAGE_TYPES.JPG}
-                                    isSilentMode
-                                    isImageMirror
-                                    imageCompression={0}
-                                    isMaxResolution
-                                    idealFacingMode={cameraFaciingMode}
-                                    onCameraError={handleCameraError}
-                                    onCameraStart={handleCameraStart}
-                                    onCameraStop={handleCameraStop}
-                                    onTakePhotoAnimationDone={handleTakePhoto}
-                                    isDisplayStartCameraError={true}
+                                <input
+                                    type="file"
+                                    name="image"
+                                    accept="image/*"
+                                    capture="environment"
+                                    onChange={handleFileChange}
                                 />
                             </Box>
                         </Flex>
                     )}
                 </Sheet.Content>
             </Sheet.Container>
-            <Sheet.Backdrop onTap={onClose} />
+            <Sheet.Backdrop onTap={handleClose} />
         </Sheet>
     );
 };

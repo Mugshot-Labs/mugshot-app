@@ -1,16 +1,7 @@
 "use client";
 
-import {
-    Box,
-    Flex,
-    Heading,
-    IconButton,
-    Image,
-    Text,
-    useToast,
-} from "@chakra-ui/react";
-import { useCallback, useState } from "react";
-import { MdDelete } from "react-icons/md";
+import { Flex, Heading, Image, Text } from "@chakra-ui/react";
+import { useCallback } from "react";
 import Sheet from "react-modal-sheet";
 
 export const SubmitDrawer = ({
@@ -24,12 +15,17 @@ export const SubmitDrawer = ({
     blobImage: string | null;
     setBlobImage: React.Dispatch<React.SetStateAction<string | null>>;
 }) => {
-    const toast = useToast();
+    // const toast = useToast();
 
     // TODO - Add theme and colorMode to bottom sheet
 
+    const onCloseSheet = useCallback(() => {
+        setBlobImage(null);
+        onClose();
+    }, [onClose, setBlobImage]);
+
     return (
-        <Sheet isOpen={isOpen} onClose={onClose} detent="content-height">
+        <Sheet isOpen={isOpen} onClose={onCloseSheet} detent="content-height">
             <Sheet.Container>
                 <Sheet.Header />
                 <Sheet.Content>
@@ -69,7 +65,7 @@ export const SubmitDrawer = ({
                     </Flex>
                 </Sheet.Content>
             </Sheet.Container>
-            <Sheet.Backdrop onTap={onClose} />
+            <Sheet.Backdrop onTap={onCloseSheet} />
         </Sheet>
     );
 };
