@@ -1,8 +1,10 @@
 import {
+    Box,
     Flex,
     HStack,
     IconButton,
     Image,
+    Text,
     useColorMode,
     useColorModeValue,
 } from "@chakra-ui/react";
@@ -32,39 +34,51 @@ export const NavigationBar = () => {
     const { toggleColorMode } = useColorMode();
 
     return (
-        <Flex
-            justify="space-between"
-            position="static"
-            top={0}
-            right={0}
-            w="100vw"
-            boxShadow="md"
-            px={[3, 8]}
-            py={[3, 2]}
-        >
-            <HStack spacing={0}>
-                <Image
-                    src={logoSrc}
-                    alt="Cleanify logo"
-                    w={82}
-                    objectFit="cover"
-                />
-            </HStack>
-            <HStack gap={2}>
-                <IconButton
-                    aria-label="Mode Change"
-                    variant="empty"
-                    colorScheme="black"
-                    size="lg"
-                    icon={useColorModeValue(<BsMoon />, <BsSun />)}
-                    onClick={toggleColorMode}
-                />
-                <IconButton
-                    aria-label="Connect wallet"
-                    icon={<GoLink />}
-                    onClick={openWalletModal}
-                />
-            </HStack>
-        </Flex>
+        <>
+            <Flex
+                justify="space-between"
+                position="static"
+                top={0}
+                right={0}
+                w="100vw"
+                boxShadow="md"
+                px={[3, 8]}
+                py={[3, 2]}
+            >
+                <HStack spacing={0}>
+                    <Image
+                        src={logoSrc}
+                        alt="Cleanify logo"
+                        w={82}
+                        objectFit="cover"
+                    />
+                </HStack>
+                <HStack gap={2}>
+                    <IconButton
+                        aria-label="Mode Change"
+                        variant="empty"
+                        colorScheme="black"
+                        size="lg"
+                        icon={useColorModeValue(<BsMoon />, <BsSun />)}
+                        onClick={toggleColorMode}
+                    />
+                    <IconButton
+                        aria-label="Connect wallet"
+                        icon={<GoLink />}
+                        onClick={openWalletModal}
+                    />
+                </HStack>
+            </Flex>
+
+            <Box bg="red">
+                <Text fontSize="medium" align="center" color="white">
+                    Android users
+                </Text>
+                <Text fontSize="small" align="center" color="white">
+                    Enable camera persmissions on your phone settings for
+                    VeWorld if the camera button is not working.
+                </Text>
+            </Box>
+        </>
     );
 };
