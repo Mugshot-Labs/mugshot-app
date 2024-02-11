@@ -45,7 +45,7 @@ export const CameraButton = ({
     const interceptOnClick = useCallback(
         (event: React.MouseEvent<HTMLInputElement>) => {
             //@ts-expect-error - window.vechain.isVewWorldExclusive is not typed
-            const isExclusive = window?.vechain?.isVewWorldExclusive ?? false;
+            const isExclusive = window?.vechain?.isInAppBrowser ?? false;
 
             if (!isExclusive) {
                 toast({
