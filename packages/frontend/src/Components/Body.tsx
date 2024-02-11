@@ -23,8 +23,6 @@ export const Body = () => {
         [onSubmitOpen]
     );
 
-    const [perms, setPerms] = useState<string[]>([]);
-
     const toast = useToast();
 
     useEffect(() => {
@@ -46,7 +44,7 @@ export const Body = () => {
                 const results = await Promise.all(promises);
                 // log the state of each camera
                 results.forEach(({ state }, i) =>
-                    setPerms((prev) => [...prev, `Camera ${i}: ${state}`])
+                    console.log(`Camera ${i}: ${state}`)
                 );
             } catch (error) {
                 toast({
