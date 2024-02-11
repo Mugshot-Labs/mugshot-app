@@ -1,28 +1,28 @@
-"use client";
-
 import { Flex, Heading, Image, Text } from "@chakra-ui/react";
 import { useCallback } from "react";
 import Sheet from "react-modal-sheet";
+import { FileType } from "../Models";
 
 export const SubmitDrawer = ({
     isOpen,
     onClose,
-    blobImage,
-    setBlobImage,
+    file,
+    setFile,
 }: {
     isOpen: boolean;
     onClose: () => void;
-    blobImage: string | null;
-    setBlobImage: React.Dispatch<React.SetStateAction<string | null>>;
+    file: FileType | null;
+    setFile: React.Dispatch<React.SetStateAction<FileType | null>>;
 }) => {
     // const toast = useToast();
+    // const { base2Blob } = useBase64Image();
+    // URL.createObjectURL(file.file)
 
     // TODO - Add theme and colorMode to bottom sheet
-
     const onCloseSheet = useCallback(() => {
-        setBlobImage(null);
+        setFile(null);
         onClose();
-    }, [onClose, setBlobImage]);
+    }, [onClose, setFile]);
 
     return (
         <Sheet isOpen={isOpen} onClose={onCloseSheet} detent="content-height">
@@ -54,9 +54,9 @@ export const SubmitDrawer = ({
                             Blah blah
                         </Text>
 
-                        {!!blobImage && (
+                        {!!file?.file && (
                             <Image
-                                src={blobImage}
+                                src={URL.createObjectURL(file.file)}
                                 w="50%"
                                 borderRadius={12}
                                 overflow="clip"

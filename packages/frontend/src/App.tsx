@@ -1,4 +1,3 @@
-import "./App.css";
 import { ChakraProvider, useColorMode } from "@chakra-ui/react";
 import { HomeScreen } from "./Screens";
 import { Theme } from "./Utils";

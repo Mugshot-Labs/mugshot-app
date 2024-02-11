@@ -7,7 +7,6 @@ export const HomeScreen = () => {
             <NavigationBar />
             <Header />
             <Body />
-
             <Spacer />
             <Footer />
         </Flex>
