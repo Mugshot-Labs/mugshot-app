@@ -67,8 +67,6 @@ export const Body = () => {
         <Flex p={6} justify="center" alignItems="center" direction="column">
             <CameraButton onFotoTaken={onFotoTaken} />
 
-            {perms && perms.map((perm, i) => <p key={i}>{perm}</p>)}
-
             <SubmitDrawer
                 isOpen={isSubmitOpen}
                 onClose={onSubmitClose}
