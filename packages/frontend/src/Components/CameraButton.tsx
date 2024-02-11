@@ -44,6 +44,24 @@ export const CameraButton = ({
 
     const interceptOnClick = useCallback(
         (event: React.MouseEvent<HTMLInputElement>) => {
+            //@ts-expect-error - window.vechain.isVewWorldExclusive is not typed
+            const isExclusive = window?.vechain?.isVewWorldExclusive ?? false;
+
+            if (!isExclusive) {
+                toast({
+                    title: "VewWorld Exclusive",
+                    description:
+                        "This app is currently only available to VewWorld users Please use the VewWorld app to access this feature.",
+                    status: "error",
+                    duration: 6000,
+                    isClosable: true,
+                });
+
+                event.preventDefault();
+                // cancel operation
+                return;
+            }
+
             if (!isGeolocationAvailable || !isGeolocationEnabled) {
                 toast({
                     title: "Geolocation Services",
@@ -94,8 +112,10 @@ export const CameraButton = ({
             <Input
                 type="file"
                 id="imageUpload"
+                name="image"
                 accept="image/*"
                 style={{ display: "none" }}
+                capture="environment"
                 onClick={interceptOnClick}
                 onChange={handleFileChange}
             />

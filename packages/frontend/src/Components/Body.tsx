@@ -18,7 +18,7 @@ export const Body = () => {
             setFile(file);
             setTimeout(() => {
                 onSubmitOpen();
-            }, 200);
+            }, 300);
         },
         [onSubmitOpen]
     );
