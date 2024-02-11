@@ -1,7 +1,6 @@
 import {
     Flex,
     HStack,
-    Heading,
     IconButton,
     Image,
     useColorMode,
@@ -26,8 +25,8 @@ export const NavigationBar = () => {
     }, [onConnectionStatusChange]);
 
     const logoSrc = useColorModeValue(
-        "/logo/cleanify_light.png",
-        "/logo/cleanify_dark.png"
+        "/logo/vechain.png",
+        "/logo/vechain_white.png"
     );
 
     const { toggleColorMode } = useColorMode();
@@ -47,13 +46,9 @@ export const NavigationBar = () => {
                 <Image
                     src={logoSrc}
                     alt="Cleanify logo"
-                    boxSize={10}
-                    w="full"
+                    w={82}
                     objectFit="cover"
                 />
-                <Heading size="md" flex={2} cursor="pointer">
-                    Cuppify
-                </Heading>
             </HStack>
             <HStack gap={2}>
                 <IconButton
