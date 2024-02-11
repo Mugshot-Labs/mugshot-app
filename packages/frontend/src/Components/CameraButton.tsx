@@ -57,8 +57,8 @@ export const CameraButton = ({
                     isClosable: true,
                 });
 
-                event.preventDefault();
                 // cancel operation
+                event.preventDefault();
                 return;
             }
 
@@ -66,21 +66,22 @@ export const CameraButton = ({
                 toast({
                     title: "Geolocation Services",
                     description:
-                        "  This app requires access to your location to work properly. Please enable location services in your browser (App) settings.",
+                        "  This app requires access to your location to work properly. Please enable location services in your system settings for Veworld.",
                     status: "error",
                     duration: 6000,
                     isClosable: true,
                 });
 
-                event.preventDefault();
                 // cancel operation
+                event.preventDefault();
                 return;
             }
 
             if (!account) {
                 openWalletModal();
-                event.preventDefault();
+
                 // cancel operation
+                event.preventDefault();
                 return;
             }
         },
